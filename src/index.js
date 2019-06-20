@@ -155,10 +155,15 @@ class InlineCode {
   /**
    * Check and change Term's state for current selection
    */
-  checkState() {
+  checkState(selection) {
     const termTag = this.api.selection.findParentTag(this.tag, InlineCode.CSS);
-
     this.button.classList.toggle(this.iconClasses.active, !!termTag);
+    
+    const parentBlock = this.api.selection.getParentBlock(selection);
+    if (!!parentBlock) {
+      const mathNodes = parentBlock.querySelectorAll('span.inline-math');
+      this.button.disabled = !!this.api.selection.hasOverlap(selection, mathNodes);
+    }
   }
 
   /**
